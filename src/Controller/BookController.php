@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Book;
+use App\Entity\Comment;
+use App\Form\BookType;
+use App\Repository\BookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,8 +29,20 @@ class BookController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"POST"})
      */
-    public function new()
+    public function new(Request $request, BookRepository $repository)
     {
-        return new Response();
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->add($book, true);
+
+            return $this->redirectToRoute('app_book_new');
+        }
+
+        return $this->renderForm('book/new.html.twig', [
+            'book_form' => $form,
+        ]);
     }
 }

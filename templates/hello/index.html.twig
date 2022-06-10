@@ -4,12 +4,15 @@
 
 {% block body %}
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ name }}! ✅</h1>
 
     This friendly message is coming from:
+
+    <img src="{{ asset('build/images/31116_JssY.jpeg') }}" alt="{{ asset('build/images/31116_JssY.jpeg') }}">
     <ul>
         <li>Your controller at <code><a href="{{ '/home/benjamin/Dev/sl/formations/training-09-06/src/Controller/HelloController.php'|file_link(0) }}">src/Controller/HelloController.php</a></code></li>
         <li>Your template at <code><a href="{{ '/home/benjamin/Dev/sl/formations/training-09-06/templates/hello/index.html.twig'|file_link(0) }}">templates/hello/index.html.twig</a></code></li>
     </ul>
 </div>
+    <script type="application/javascript"></script>
 {% endblock %}

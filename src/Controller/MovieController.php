@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +23,11 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/details", name="details", methods={"GET"})
+     * @Route("/{id<\d+>}", name="details", methods={"GET"})
      */
-    public function details(): Response
+    public function details(int $id, MovieRepository $repository): Response
     {
-        $movie = [
-            'title' => 'Star Wars: A New Hope',
-            'releasedAt' => new \DateTime('1977-05-25'),
-            'genres' => ['Action', 'Adventure', 'Fantasy'],
-        ];
+        $movie = $repository->find($id);
 
         return $this->render('movie/details.html.twig', [
             'movie' => $movie,

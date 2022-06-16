@@ -20,5 +20,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+
+    App\Service\ServiceInterface: '@App\Service\DecoratorService'
+
+    App\Service\OtherService:
+        decorates: App\Service\MyService
+
+    App\Service\DecoratorService:
+        decorates: App\Service\OtherService
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

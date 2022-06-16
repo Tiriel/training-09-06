@@ -15,6 +15,8 @@ class MovieTransformer
             ->setPoster($data['Poster'])
             ->setCountry($data['Country'])
             ->setReleasedAt(new \DateTimeImmutable($data['Released']))
+            ->setRated($data['Rated'])
+            ->setOmdbId($data['imdbID'])
             ->setPrice(5.0)
         ;
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Consumer\OMDbApiConsumer;
+use App\Provider\MovieProvider;
 use App\Repository\MovieRepository;
 use App\Service\MyService;
 use App\Service\ServiceInterface;
@@ -26,12 +27,11 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/{id<\d+>}", name="details", methods={"GET"})
+     * @Route("/{title<.+>}", name="details", methods={"GET"})
      */
-    public function details(int $id, MovieRepository $repository, OMDbApiConsumer $consumer): Response
+    public function details(string $title, MovieProvider $provider): Response
     {
-        $movie = $repository->find($id);
-        dump($consumer->consume(OMDbApiConsumer::MODE_TITLE, 'The Matrix'));
+        $movie = $provider->getByTitle($title);
 
         return $this->render('movie/details.html.twig', [
             'movie' => $movie,

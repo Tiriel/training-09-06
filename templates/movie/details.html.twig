@@ -7,9 +7,11 @@
     {% if movie is not null %}
         <h1>Movie: {{ movie.title }}</h1>
 
+        <img src="{{ movie.poster }}" alt="{{ movie.title }} poster" class="w-50 float-end">
         <ul>
+            <li>Country : {{ movie.country }}</li>
             <li>Released : {{ movie.releasedAt|date('Y M d') }}</li>
-            <li>Genres: {{ movie.genres|join(', ') }}</li>
+            <li>Genres: {{ movie.genres|reduce((carry, genre) => carry == '' ? genre.name : carry ~ ', ' ~ genre.name) }}</li>
         </ul>
     {% else %}
         <h1>Movie</h1>

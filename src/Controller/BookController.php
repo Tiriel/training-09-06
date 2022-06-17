@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Comment;
+use App\Event\BookOrderEvent;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +45,20 @@ class BookController extends AbstractController
 
         return $this->renderForm('book/new.html.twig', [
             'book_form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/order/{title<\w+>}", name="order")
+     */
+    public function order(string $title, BookRepository $repository, EventDispatcherInterface $dispatcher): Response
+    {
+        $book = $repository->findOneBy(['title' => $title]);
+        // ...
+        $dispatcher->dispatch(new BookOrderEvent($book), BookOrderEvent::ORDER);
+
+        return $this->render('book/index.html.twig', [
+            'book' => $book,
         ]);
     }
 }

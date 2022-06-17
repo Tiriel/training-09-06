@@ -6,18 +6,29 @@ use App\Consumer\OMDbApiConsumer;
 use App\Entity\Movie;
 use App\Repository\MovieRepository;
 use App\Transformer\MovieTransformer;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MovieProvider
 {
     private OMDbApiConsumer $consumer;
     private MovieTransformer $transformer;
     private MovieRepository $repository;
+    private AuthorizationCheckerInterface $checker;
 
-    public function __construct(OMDbApiConsumer $consumer, MovieTransformer $transformer, MovieRepository $repository)
+    public function __construct(OMDbApiConsumer $consumer, MovieTransformer $transformer, MovieRepository $repository, AuthorizationCheckerInterface $checker)
     {
         $this->consumer = $consumer;
         $this->transformer = $transformer;
         $this->repository = $repository;
+        $this->checker = $checker;
+    }
+
+    public function updateMovie(Movie $movie)
+    {
+        if ($this->checker->isGranted('movie_edit', $movie)) {
+            throw new UnauthorizedHttpException('Unauthorized');
+        }
     }
 
     public function getById(string $id): Movie
